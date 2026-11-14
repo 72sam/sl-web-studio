@@ -4,73 +4,72 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#171719">
-  <meta name="description" content="SL Web Studio progetta siti web, e-commerce e gestionali Odoo per negozi, locali e imprese. Scopri i lavori e raccontaci come vuoi far crescere la tua attività.">
+  <meta name="description" content="SL Web Studio sviluppa siti, e-commerce e gestionali. Esplora il negozio connesso di Altern@tiva, il configuratore FourLife e le due sedi di Mas Linda.">
+  <meta property="og:title" content="SL Web Studio — Siti web e gestionali">
+  <meta property="og:description" content="I progetti, le decisioni e gli strumenti che abbiamo costruito per chi lavora al banco, in cantiere e in studio.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="it_IT">
-  <meta property="og:title" content="SL Web Studio · Siti web, e-commerce e gestionali">
-  <meta property="og:description" content="Dalla presenza online alla gestione di tutti i giorni. Guarda i progetti di SL Web Studio.">
-  <title>SL Web Studio · Siti web, e-commerce e gestionali</title>
+  <meta property="og:image:alt" content="Il monogramma in metallo di SL Web Studio accanto al titolo Siti web e gestionali.">
+  <meta property="og:image" content="https://72sam.github.io/sl-web-studio/assets/sl-studio-social.jpg">
+  <title>SL Web Studio · Siti web e gestionali</title>
   <link rel="icon" href="assets/sl.svg" type="image/svg+xml">
   <link rel="preload" href="assets/montserrat.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="sl-motion.css">
+  <script defer src="sl-motion.js"></script>
 </head>
 <body id="inizio">
   <a class="skip" href="#contenuto">Vai al contenuto</a>
-  <header class="topbar">
-    <div class="wrap nav">
-      <a class="brand" href="#inizio" aria-label="SL Web Studio, inizio pagina"><img src="assets/sl.svg" alt="" width="43" height="31"><span>Web Studio</span></a>
-      <nav aria-label="Navigazione principale"><a href="#servizi">Servizi</a><a href="#portfolio">Portfolio</a><a class="menu-contact" href="#contatti">Contatti <i aria-hidden="true">↗</i></a></nav>
-    </div>
-  </header>
+  <header class="topbar"><div class="shell nav">
+    <a class="brand" href="#inizio" aria-label="SL Web Studio, inizio"><img src="assets/sl.svg" alt="" width="43" height="31"><span>Web Studio</span></a>
+    <nav aria-label="Navigazione principale"><a href="#portfolio">Progetti</a><a href="#studio">Studio</a><a class="nav-cta" href="#contatti">Contatti <span aria-hidden="true">↗</span></a></nav>
+  </div></header>
   <main id="contenuto">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <h1 id="hero-title">Siti web e<br>gestionali<span class="hero-dot">.</span></h1>
-          <p>Dal primo incontro online al lavoro di ogni giorno. Progettiamo siti, e-commerce e strumenti su misura per chi gestisce un’attività.</p>
-          <div class="actions"><a class="button light" href="#portfolio">Guarda i progetti <i aria-hidden="true">↓</i></a><a class="text-link" href="#contatti">Parliamone <i aria-hidden="true">↗</i></a></div>
-        </div>
-        <div class="art" aria-hidden="true"><div class="orbits"><span></span><span></span></div><div class="art-logo"><div class="metal-base"></div><div class="metal-face"></div></div><div class="art-reflection"></div></div>
+    <section class="hero" aria-labelledby="hero-title"><div class="shell hero-grid">
+      <div class="hero-copy">
+        <h1 id="hero-title">Siti web<br><em>e gestionali.</em></h1>
+        <p>Progettiamo il sito che vedono i tuoi clienti e gli strumenti che usi ogni giorno per gestire ordini, prenotazioni e vendite.</p>
+        <div class="actions"><a class="button light" href="#portfolio">Esplora i progetti <span aria-hidden="true">↓</span></a><a class="text-link" href="#contatti">Parliamone <span aria-hidden="true">↗</span></a></div>
       </div>
-    </section>
-    <section class="projects wrap" id="portfolio" aria-labelledby="portfolio-title">
-      <div class="section-head"><h2 id="portfolio-title">Portfolio<span>.</span></h2><a class="line-link" href="https://samuelnasi.com/it/#work">Tutti i lavori di Samuel <i aria-hidden="true">↗</i></a></div>
-      <div class="project-grid">
-        <article><a class="project-link" href="https://alternativatrento.it/">
-          <div class="project-visual peach"><img src="assets/alternativa.webp" width="1440" height="900" alt="Home page del negozio Alternativa Trento" loading="lazy"></div>
-          <div class="project-title"><h3>Alternativa Trento</h3><i aria-hidden="true">↗</i></div></a>
-          <p>Un negozio, due canali di vendita. Sito e-commerce, catalogo, cassa e fatture collegati attraverso Odoo.</p>
+      <div class="art" data-sl-stage aria-hidden="true"><div class="orbits"><span></span><span></span></div><div class="art-logo"><div class="metal-base"></div><div class="metal-face"></div></div><div class="art-reflection"></div></div>
+    </div></section>
+    <section class="work-section shell" id="portfolio" aria-labelledby="work-title">
+      <div class="section-intro" data-sl-reveal><h2 id="work-title">Progetti <em>selezionati.</em></h2><p>Tre attività, tre esigenze diverse. Entra nei progetti per vedere cosa abbiamo costruito e perché.</p></div>
+      <div class="case-stack" data-sl-stack>
+        <article class="work-card tinta-alternativa" data-sl-panel>
+          <div class="work-copy"><p class="overline">Commercio · E-commerce e Odoo</p><div><h3>Altern@tiva</h3><p class="work-lead">Un solo catalogo, dalla vetrina alla cassa.</p><p class="work-detail">Lo stesso codice a barre identifica un gioco online e al banco. Nei tre mesi osservati, il sito ha ricevuto circa 1.030 clic dai risultati di Google.</p></div><a class="work-open" href="progetti/alternativa/">Leggi il caso <span aria-hidden="true">↗</span></a></div>
+          <a class="work-image alt-cover" href="progetti/alternativa/" tabindex="-1" aria-hidden="true"><img class="cover-photo" src="assets/cases/alternativa-vetrina.webp" alt="" loading="lazy"><div class="device inset-device"><div class="device-bar" aria-hidden="true"><i></i><i></i><i></i></div><img src="assets/cases/alternativa-catalogo.webp" alt="" loading="lazy"></div></a>
         </article>
-        <article><a class="project-link" href="https://maslindabeautylab.it/">
-          <div class="project-visual lavender"><img src="assets/maslinda.webp" width="1440" height="950" alt="Home page di Mas Linda Beauty Lab" loading="lazy"></div>
-          <div class="project-title"><h3>Mas Linda Beauty Lab</h3><i aria-hidden="true">↗</i></div></a>
-          <p>Il sito del centro estetico presenta i trattamenti, accompagna alla prenotazione e cura la presenza nelle ricerche locali.</p>
+        <article class="work-card tinta-fourlife" data-sl-panel>
+          <div class="work-copy"><p class="overline">Edilizia · Esperienza interattiva</p><div><h3>FourLife</h3><p class="work-lead">Il nuovo pavimento, nella tua stanza.</p><p class="work-detail">Una foto dell’interno e i campioni dell’impresa diventano uno strumento per confrontare finiture e spiegare al tecnico il risultato desiderato.</p></div><a class="work-open" href="progetti/fourlife/">Esplora il configuratore <span aria-hidden="true">↗</span></a></div>
+          <a class="work-image four-cover" href="progetti/fourlife/" tabindex="-1" aria-hidden="true"><img class="cover-photo" src="assets/cases/fourlife-cantiere.webp" alt="" loading="lazy"><div class="device inset-device"><div class="device-bar"><i></i><i></i><i></i></div><img src="assets/cases/fourlife-configuratore.webp" alt="" loading="lazy"></div></a>
+        </article>
+        <article class="work-card tinta-maslinda" data-sl-panel>
+          <div class="work-copy"><p class="overline">Beauty · Sito e ricerca locale</p><div><h3>Mas Linda</h3><p class="work-lead">Il trattamento giusto, nella sede giusta.</p><p class="work-detail">Due centri estetici con servizi diversi. Abbiamo ripensato come si sceglie un trattamento, si contatta la sede e si acquista un buono regalo.</p></div><a class="work-open" href="progetti/maslinda/">Leggi il caso <span aria-hidden="true">↗</span></a></div>
+          <a class="work-image linda-cover" href="progetti/maslinda/" tabindex="-1" aria-hidden="true"><img class="cover-photo" src="assets/cases/maslinda-trattamento.webp" alt="" loading="lazy"><div class="device inset-device"><div class="device-bar"><i></i><i></i><i></i></div><img src="assets/cases/maslinda-sito.webp" alt="" loading="lazy"></div></a>
         </article>
       </div>
-      <details class="more-work">
-        <summary>Altri progetti dello studio <span aria-hidden="true"></span></summary>
-        <div class="more-grid">
-          <figure><img src="assets/salute-bellezza.webp" width="900" height="900" alt="Anteprima del sito Salute Bellezza" loading="lazy"><figcaption>Salute Bellezza</figcaption></figure>
-          <figure><img src="assets/medbox.webp" width="900" height="900" alt="Anteprima del sito MedBox" loading="lazy"><figcaption>MedBox</figcaption></figure>
-        </div>
-      </details>
     </section>
-    <section class="services" id="servizi" aria-labelledby="services-title">
-      <div class="wrap services-grid">
-        <div class="services-intro"><h2 id="services-title">Cosa<br class="wide"> facciamo<span>.</span></h2><p>Partiamo da come lavori e da quello che i clienti devono poter fare dal telefono.</p></div>
-        <div class="service-list">
-          <article><h3>Siti web ed e-commerce</h3><p>Presentiamo prodotti e servizi, con un percorso chiaro per acquistare, prenotare o contattarti. Puoi aggiornare foto, prezzi e contenuti quando cambiano.</p></article>
-          <article><h3>Prenotazioni e ordini</h3><p>Per un locale possiamo collegare menu, asporto e prenotazioni a una dashboard da aprire su tablet o computer, mantenendo la cassa che usi già.</p></article>
-          <article><h3>Gestionali Odoo</h3><p>Quando serve un sistema unico, colleghiamo sito, ordini, magazzino, vendite e fatture in Odoo. Scegliamo insieme quali funzioni portare nel tuo lavoro quotidiano.</p></article>
-          <article><h3>Visibilità locale</h3><p>Allineiamo sito, orari, recapiti e servizi con la tua scheda Google, per aiutare chi ti cerca a trovarti e scegliere come raggiungerti.</p></article>
-        </div>
+    <section class="archive shell" aria-label="Altri lavori"><div class="archive-head"><h2>Altri lavori</h2><a class="text-link" href="https://samuelnasi.com/it/">Portfolio di Samuel <span aria-hidden="true">↗</span></a></div>
+      <div class="archive-grid">
+        <a class="archive-item" href="progetti/medbox/"><img src="assets/medbox.webp" width="900" height="900" alt="" loading="lazy"><div><p class="overline">Fitness · Progetto web</p><h3>MedBox</h3></div><span class="circle" aria-hidden="true">↗</span></a>
+        <a class="archive-item" href="progetti/salute-bellezza/"><img src="assets/salute-bellezza.webp" width="900" height="900" alt="" loading="lazy"><div><p class="overline">Estetica · Design dell’interfaccia</p><h3>Salute &amp; Bellezza</h3></div><span class="circle" aria-hidden="true">↗</span></a>
       </div>
     </section>
-    <section class="contact wrap" id="contatti" aria-labelledby="contact-title">
-      <div><h2 id="contact-title">Hai un progetto<br>in mente<span>?</span></h2><p>Raccontaci cosa vuoi realizzare o cosa ti rallenta oggi.</p></div>
-      <a class="email-link" href="mailto:info@by-sl.it">info@by-sl.it <i aria-hidden="true">↗</i></a>
-    </section>
+    <section class="studio" id="studio"><div class="shell studio-grid">
+      <header data-sl-reveal><p class="overline">Lo studio</p><h2>Dal primo clic<br><em>al lavoro di ogni giorno.</em></h2></header>
+      <div class="practice">
+        <article><h3>Siti ed e-commerce</h3><p>Partiamo da quello che il cliente cerca e disegniamo il percorso fino al contatto, alla prenotazione o all’acquisto. Lo proviamo anche da telefono.</p></article>
+        <article><h3>Prenotazioni e ordini</h3><p>Per chi lavora in sala o al banco possiamo riunire prenotazioni e asporto in una dashboard da aprire sul tablet, mantenendo la cassa già in uso.</p></article>
+        <article><h3>Gestionali e integrazioni</h3><p>Seguiamo il percorso di un ordine insieme a chi lo gestisce. In Odoo colleghiamo i passaggi che servono davvero, dal magazzino alla vendita e alla fatturazione.</p></article>
+      </div>
+    </div></section>
+    <section class="lab" aria-labelledby="lab-title"><div class="shell lab-grid">
+      <div class="lab-symbol" aria-hidden="true"><img src="assets/cases/unbind-progetto.webp" alt="" loading="lazy"></div>
+      <div data-sl-reveal><p class="overline">Ricerca e sviluppo · Prototipo</p><h2 id="lab-title">Unbind</h2><p>Cosa succede tra la cassa e il sistema fiscale quando il software di vendita registra un’operazione? È la domanda da cui è nato il nostro prototipo.</p><a class="text-link" href="progetti/unbind/">Dentro il progetto <span aria-hidden="true">↗</span></a></div>
+    </div></section>
+    <section class="contact" id="contatti"><div class="shell contact-inner"><div><p class="overline">Contatti</p><h2>Su cosa<br><em>lavoriamo?</em></h2></div><div class="contact-action"><p>Hai un sito da ripensare o un passaggio che rallenta il tuo lavoro? Raccontacelo.</p><a href="mailto:info@by-sl.it">info@by-sl.it <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
-  <footer><div class="wrap footer-inner"><a class="brand" href="#inizio" aria-label="SL Web Studio, torna all’inizio"><img src="assets/sl.svg" width="40" height="29" alt=""><span>Web Studio</span></a><span>Samuel Nasi · P. IVA 02786520227</span><a href="https://samuelnasi.com/">Portfolio personale <i aria-hidden="true">↗</i></a></div></footer>
+  <footer><div class="shell foot"><a class="brand" href="#inizio" aria-label="SL Web Studio, torna all’inizio"><img src="assets/sl.svg" alt="" width="38" height="28"><span>Web Studio</span></a><span>Samuel Nasi · P. IVA 02786520227</span><a class="foot-link" href="https://samuelnasi.com/">Portfolio personale ↗</a></div></footer>
 </body>
 </html>

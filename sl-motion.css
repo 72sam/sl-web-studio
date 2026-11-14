@@ -1,0 +1,45 @@
+/* The original SVG remains visible while the local 3D model initializes. */
+[data-sl-stage] { position: relative; isolation: isolate; }
+.sl-stage-canvas {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .42s ease;
+}
+[data-sl-stage] .art-logo { transition: opacity .35s ease; }
+[data-sl-stage].sl-stage-ready .art-logo { opacity: 0; visibility: hidden; }
+[data-sl-stage].sl-stage-ready .sl-stage-canvas { opacity: 1; }
+[data-sl-stack] { isolation: isolate; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sl-revealed { animation: sl-ink-rise .68s cubic-bezier(.16,.8,.2,1) both; }
+  @keyframes sl-ink-rise {
+    from { opacity: .14; translate: 0 17px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+
+  @media (min-width: 350px) and (min-height: 620px) {
+    [data-sl-stack].sl-stack-ready > [data-sl-panel] {
+      position: sticky;
+      top: var(--sl-pin-top, 74px);
+      z-index: var(--sl-order, 1);
+      transform-origin: center top;
+      scale: var(--sl-sheet-scale, 1);
+    }
+    [data-sl-stack].sl-stack-ready:has(:focus-visible) > [data-sl-panel] {
+      position: relative;
+      top: auto;
+      scale: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-stage-canvas { display: none; }
+  [data-sl-stage].sl-stage-ready .art-logo { opacity: 1; visibility: visible; }
+}
