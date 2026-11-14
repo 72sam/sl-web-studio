@@ -81,3 +81,4 @@ html.case-modal-open{overflow:hidden}
 }
 .case-preview-link{display:inline-flex;align-items:center;gap:15px;margin-top:20px;min-height:44px;padding:.6em 1.15em;border:1px solid var(--ink);border-radius:40px;font-size:.86rem;font-weight:600}
 .case-preview-link:hover{background:var(--night);color:var(--paper)}
+.project-fourlife #confronto{padding-top:clamp(24px,4vw,60px);scroll-margin-top:10px}
