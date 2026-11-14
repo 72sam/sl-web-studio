@@ -41,7 +41,9 @@
     });
     stage.addEventListener('pointercancel', () => { drag = null; });
     stage.addEventListener('pointerleave', () => { if (!drag?.active) drag = null; });
-    stage.addEventListener('lostpointercapture', () => { drag = null; });
+    stage.addEventListener('lostpointercapture', event => {
+      if (event.target === stage && event.pointerId === drag?.id) drag = null;
+    });
     input.addEventListener('input', sync);
 
     sync();
