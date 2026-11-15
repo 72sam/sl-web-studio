@@ -1,53 +1,106 @@
-/* Editorial project pages share the studio’s navigation, page width and typography. */
-.case-page{--project-tint:#e8e3f1;--reader:68ch}
-.project-alternativa{--project-tint:#efd5c9}
-.project-fourlife{--project-tint:#d9ded2}
-.project-maslinda{--project-tint:#ebdbd5}
-.project-medbox{--project-tint:#e0dfbd}
-.project-salute-bellezza{--project-tint:#e2d7db}
-.case-back{display:inline-flex;align-items:center;gap:.65em;min-height:44px;font-size:.83rem;font-weight:590}
-.case-back:hover,.case-next-project:hover>span:last-child{text-decoration:underline;text-underline-offset:.16em}
-.case-intro>.case-back{margin-top:clamp(12px,2vw,32px)}
-.case-heading{display:grid;grid-template-columns:minmax(0,1.07fr) minmax(0,1fr);gap:clamp(28px,6vw,100px);align-items:center;padding-block:clamp(24px,3vw,48px) clamp(48px,7vw,106px)}
-.case-heading h1{font-size:clamp(3.6rem,7.3vw,7.8rem);line-height:.97;letter-spacing:-.079em;margin-block:.2em .25em}
-.case-deck{font-size:clamp(1.85rem,3.15vw,3.65rem);line-height:1.02;max-width:22ch;color:#444046}
-.case-deck em{letter-spacing:-.04em}
+/* The opening of each story uses the material available for that project. */
+.case-page{--project-tint:#e9e5ed;--end:var(--footer-bg);--highlight:#d7c8ff;--reader:66ch;color:var(--ink)}
+.project-alternativa{--project-tint:#eddfcb;--highlight:#f1c67d}
+.project-fourlife{--project-tint:#e2e5db;--highlight:#c6d8b3}
+.project-maslinda{--project-tint:#ecdfd8;--highlight:#f2c8bc}
+.project-medbox{--project-tint:#e5e862;--highlight:#edef72}
+.project-salute-bellezza{--project-tint:#e2e2da;--highlight:#d2dfc0}
+.project-unbind{--project-tint:#0f2238;--highlight:#a7d5ff}
+.case-back{display:inline-flex;align-items:center;gap:.65em;min-height:44px;font-size:.82rem;font-weight:590}
+.case-back:hover,.case-index a:hover,.case-next-project:hover>span:last-child{text-decoration:underline;text-underline-offset:.16em}
+.case-opening>.shell>.case-back{margin-block:clamp(7px,1.2vw,18px) clamp(18px,3vw,45px)}
+.case-opening{padding-bottom:clamp(35px,5.7vw,86px)}
+.case-opening h1{font-size:clamp(4rem,7.6vw,8rem);line-height:.94;letter-spacing:-.079em;overflow-wrap:normal}
+.case-deck{font-size:clamp(1.85rem,3.15vw,3.65rem);line-height:1.03;max-width:23ch;color:#49434b}
+.case-deck em{letter-spacing:-.043em}
+.case-summary{max-width:43ch;font-size:clamp(1.22rem,2.1vw,2.05rem);line-height:1.38;letter-spacing:-.038em}
+.case-opening-pair,.case-editorial-portrait,.case-sports-spread,.case-archive-spread,.case-prototype-spread{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:clamp(28px,6vw,108px)}
+.case-opening-pair h1,.case-editorial-portrait h1,.case-sports-spread h1{margin-bottom:.22em}
+.case-title-pair{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);align-items:end;gap:4vw;margin-bottom:clamp(22px,3vw,50px)}
+.case-title-pair h1{font-size:clamp(3rem,5.75vw,6.65rem);letter-spacing:-.082em}
+.case-title-pair+.case-cover .case-photo{aspect-ratio:2.25}
+.project-alternativa .case-cover img{object-fit:cover;object-position:center 50%}
+.case-title-pair~.case-summary{margin:clamp(26px,4vw,64px) 0 0 auto;max-width:44ch}
+.case-opening-pair+.case-summary{margin-top:clamp(24px,3.8vw,58px);max-width:62ch}
+.project-fourlife .case-cover .case-photo{aspect-ratio:1.55}
+.project-fourlife .case-cover img{object-fit:cover}
+.case-preview-link{display:inline-flex;align-items:center;gap:15px;margin-top:20px;min-height:44px;padding:.6em 1.15em;border:1px solid var(--ink);border-radius:40px;font-size:.86rem;font-weight:600}
+.case-preview-link:hover{background:var(--night);color:var(--paper)}
+.project-fourlife #confronto{padding-bottom:clamp(35px,5vw,84px);scroll-margin-top:10px}
+.case-editorial-portrait{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);grid-template-areas:'photo text';align-items:center}
+.case-editorial-portrait>div{grid-area:text}
+.case-editorial-portrait .case-summary,.case-sports-spread .case-summary{font-size:clamp(1rem,1.3vw,1.33rem);line-height:1.53;letter-spacing:-.018em;margin-top:clamp(18px,2.8vw,40px)}
+.case-editorial-portrait .case-cover{grid-area:photo;max-width:590px}
+.case-editorial-portrait .case-photo{aspect-ratio:1.06}
+.case-editorial-portrait .case-photo img{object-fit:cover;object-position:center 44%}
+.project-medbox .case-opening{background:#1b1c1a;color:#f8f8ed}
+.case-sports-spread .case-deck{color:#e7eb73}
+.case-sports-spread h1{font-size:clamp(4.4rem,9vw,9.5rem)}
+.case-sports-spread .case-cover{width:min(100%,470px);justify-self:end}
+.case-sports-spread .case-cover figcaption{color:#cecdc0}
+.case-centered-heading{text-align:center;margin-inline:auto;max-width:1100px;margin-bottom:clamp(26px,4.5vw,72px)}
+.case-centered-heading h1{font-weight:495;font-size:clamp(4.3rem,8.5vw,9rem)}
+.case-centered-heading .case-deck{max-width:none;margin:.4em auto 0}
+.case-archive-spread{grid-template-columns:minmax(0,.92fr) minmax(0,1fr);width:min(100%,1090px);margin-inline:auto}
+.case-archive-spread .case-cover{max-width:480px}
+.case-lab-title{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:end;border-bottom:1px solid #c9ccd6;padding-bottom:clamp(24px,3vw,48px)}
+.case-lab-title h1{font-size:clamp(5rem,12.5vw,13rem)}
+.case-lab-title .case-deck{max-width:18ch}
+.case-prototype-spread{margin-top:clamp(22px,3vw,50px)}
+.case-prototype-spread .case-cover .case-photo{aspect-ratio:1200/630}
 .case-figure,.case-film{margin:0;min-width:0}
 .case-photo{display:block;background:var(--project-tint);position:relative;cursor:zoom-in}
 .case-photo img{width:100%;height:auto}
 .case-zoom-icon{position:absolute;right:12px;bottom:12px;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--paper);color:var(--ink);font:1.2rem/1 system-ui;box-shadow:0 2px 10px #18171a22;transition:transform .2s ease,background .2s ease}
 .case-photo:hover .case-zoom-icon{transform:scale(1.09);background:white}
-.case-page figcaption{margin-top:10px;line-height:1.5;color:#605d62;font-size:.76rem;max-width:83ch}
-.case-cover .case-photo{aspect-ratio:1.42;display:grid;place-items:center}
+.case-figure figcaption,.case-film figcaption{margin-top:10px;line-height:1.5;color:#605d62;font-size:.76rem;max-width:83ch}
+.case-cover .case-photo{display:grid;place-items:center}
 .case-cover img{height:100%;max-height:100%;width:100%;object-fit:contain;min-height:0}
-.project-alternativa .case-cover img,.project-fourlife .case-cover img,.project-maslinda .case-cover img{object-fit:cover}
-.project-maslinda .case-cover img{object-position:50% 44%}
-.project-medbox .case-cover,.project-salute-bellezza .case-cover{width:min(100%,440px);justify-self:center}
-.project-medbox .case-cover .case-photo,.project-salute-bellezza .case-cover .case-photo{aspect-ratio:1}
-.project-unbind .case-cover .case-photo{aspect-ratio:1200/630;background:#10151e}
-.case-context{border-block:1px solid var(--line);display:grid;grid-template-columns:.9fr 1fr;gap:clamp(30px,9vw,150px);padding-block:clamp(28px,4.4vw,78px)}
-.case-context h2,.case-result h2{font-size:clamp(1.8rem,3.1vw,3.3rem);margin-bottom:.6em}
-.case-body p,.case-result p{font-size:clamp(1rem,1.12vw,1.15rem);line-height:1.66;max-width:var(--reader);color:var(--copy)}
-.case-context .case-summary{font-size:clamp(1.1rem,1.55vw,1.55rem);line-height:1.46;letter-spacing:-.028em;color:var(--ink)}
-.case-process{padding-block:clamp(44px,6vw,96px)}
-.case-process>h2{font-size:clamp(2.6rem,5.6vw,5.7rem);margin-bottom:.5em}
-.case-step{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.4fr);gap:clamp(25px,6.5vw,108px);border-top:1px solid var(--line);padding-block:clamp(28px,4vw,68px)}
-.case-step:last-child{padding-bottom:0}
-.case-step h3{font-size:clamp(1.48rem,2.3vw,2.5rem);line-height:1.12;letter-spacing:-.052em;max-width:19ch}
-.case-illustrations{display:grid;gap:26px;margin-top:clamp(20px,2.6vw,42px)}
+.case-chapter{position:relative;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.42fr);gap:clamp(25px,7.5vw,128px);padding-block:clamp(30px,5.3vw,88px)}
+.case-chapter::before{content:"";position:absolute;top:0;height:1px;background:var(--line);inset-inline:var(--gutter)}
+.case-column-title{min-width:0}
+.case-column-title h2{align-self:start;position:sticky;top:clamp(24px,7vh,84px);max-width:18ch;font-size:clamp(1.72rem,3vw,3.35rem);line-height:1.055;letter-spacing:-.057em}
+.case-chapter-content{min-width:0}
+.case-chapter-content>p{color:var(--copy);font-size:clamp(1rem,1.22vw,1.22rem);line-height:1.63;max-width:var(--reader)}
+.case-chapter-content>p+p{margin-top:1em}
+.case-context .case-column-title h2{font-family:Instrument,Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(2.05rem,4vw,4.4rem);max-width:17ch}
+.case-index{margin-top:24px}
+.case-index ul{display:flex;flex-wrap:wrap;gap:0 18px;padding:0;margin:0;list-style:none}
+.case-index a{font-size:.8rem;min-height:40px;text-decoration:underline;text-underline-offset:4px}
+.case-illustrations{display:grid;gap:clamp(24px,4vw,62px);margin-top:clamp(20px,2.6vw,42px)}
 .case-illustrations .case-photo{overflow:hidden}
-.case-illustrations .case-photo img{max-height:565px;object-fit:contain}
+.case-illustrations .case-photo img{max-height:620px;object-fit:contain}
 .case-film video{background:var(--night);width:100%;height:auto}
-.case-result{background:var(--night);color:var(--paper)}
-.case-result-grid{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.4fr);gap:clamp(25px,6.5vw,108px);padding-block:clamp(42px,6vw,96px)}
-.case-result h2{color:var(--lavender);margin:0}
-.case-result p{font-size:clamp(1.17rem,1.7vw,1.75rem);line-height:1.48;letter-spacing:-.025em;color:var(--paper)}
-.case-result p.case-note{margin-top:15px;font-size:.85rem;line-height:1.56;letter-spacing:0;color:#c5c1cc}
-.case-result .button{margin-top:22px}
-.case-next{align-items:center;justify-content:space-between;padding-block:clamp(34px,4.7vw,76px);gap:24px}
-.case-next .case-next-project{flex-direction:column;align-items:flex-start;gap:9px}
-.case-next .case-next-project>span:last-child{font-size:clamp(2rem,4.6vw,4.8rem);line-height:.99;font-weight:560;letter-spacing:-.069em}
+.case-last-leaf,.case-end-stack{background:var(--paper);position:relative}
+.case-last-leaf>.case-chapter{padding-bottom:clamp(64px,9.5vw,150px)}
+/* The last chapter pins only when its entire height has traversed the viewport.
+   The final sheet stays in flow and paints above the pinned chapter. */
+@media(prefers-reduced-motion:no-preference){
+  .case-last-leaf.is-measured{position:sticky;top:var(--last-leaf-top)}
+  .case-last-leaf:has(:focus-visible){position:relative;top:auto}
+}
+.case-end,.case-page>footer{color:var(--paper);background:var(--end);position:relative;z-index:1}
+.case-end{border-radius:clamp(16px,3vw,50px) clamp(16px,3vw,50px) 0 0}
+.case-result{padding-block:clamp(45px,7.7vw,126px) clamp(42px,6vw,96px)}
+.case-result-heading{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.42fr);gap:clamp(24px,7.5vw,128px);align-items:start}
+.case-result h2{font-size:clamp(3rem,6.5vw,7rem);line-height:.95;color:var(--highlight)}
+.case-result-heading p{font-size:clamp(1.24rem,1.85vw,2rem);line-height:1.4;letter-spacing:-.033em;max-width:46ch}
+.case-result .case-note{margin-top:18px;font-size:.8rem;line-height:1.5;color:#cbc6cd;max-width:80ch}
+.case-result .button{margin-top:24px}
+.case-metrics{margin-top:clamp(26px,4vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr));gap:clamp(20px,3.5vw,60px)}
+.case-metrics>div{border-top:1px solid #ffffff46;padding-top:clamp(14px,2vw,31px);display:flex;flex-direction:column;align-items:flex-start}
+.case-metrics dd{order:-1;color:var(--highlight);font-size:clamp(2.8rem,5.8vw,6.6rem);line-height:.99;letter-spacing:-.075em;margin-bottom:.18em;font-weight:550}
+.case-metrics dt{font-size:clamp(1rem,1.35vw,1.35rem);max-width:35ch}
+.case-metrics small{display:block;color:#cbc6cd;line-height:1.45;margin-top:7px}
+.case-next{align-items:center;justify-content:space-between;padding-block:clamp(32px,5vw,82px);gap:24px;position:relative}
+.case-next::before,.case-page .foot::before{content:"";position:absolute;top:0;inset-inline:var(--gutter);height:1px;background:#ffffff34}
+.case-next .case-next-project{flex-direction:column;align-items:flex-start;gap:9px;min-width:0}
+.case-next-label{font-size:.8rem;font-weight:520;color:#d1ccd5}
+.case-next .case-next-project>span:last-child{font-size:clamp(2.1rem,5vw,5.4rem);line-height:1;font-weight:540;letter-spacing:-.069em}
 .case-next-project i{font:normal .69em/1 system-ui}
+.case-page .foot{position:relative}
+.case-page .foot .brand img{filter:invert(1)}
+.case-page .foot>span{color:#c8c4cc}
 .case-lightbox{position:fixed;inset:0;width:min(97vw,1590px);max-width:none;height:93vh;height:93dvh;max-height:none;padding:0;border:1px solid #45424b;background:#19191d;color:#f7f5fa;border-radius:12px;overscroll-behavior:contain}
 .case-lightbox::backdrop{background:rgba(10,9,14,.84)}
 .case-lightbox-inner{display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:clamp(9px,1.5vw,25px);gap:10px;height:100%}
@@ -63,22 +116,31 @@
 .case-caption{font-size:.85rem;line-height:1.4;color:#dedbe3}
 html.case-modal-open{overflow:hidden}
 @media(max-width:760px){
-  .case-heading{grid-template-columns:1fr;gap:24px;padding-bottom:36px}
-  .case-heading h1{font-size:clamp(3.1rem,9vw,4.8rem)}
-  .case-deck{font-size:clamp(1.7rem,5.6vw,2.55rem)}
+  .case-title-pair,.case-opening-pair,.case-editorial-portrait,.case-sports-spread,.case-archive-spread,.case-prototype-spread,.case-lab-title{grid-template-columns:1fr;gap:21px}
+  .case-title-pair{gap:12px}
+  .case-title-pair+.case-cover .case-photo{aspect-ratio:1.42}
   .case-cover{width:100%}
-  .project-medbox .case-cover,.project-salute-bellezza .case-cover{justify-self:start}
-  .case-context,.case-step,.case-result-grid{grid-template-columns:1fr;gap:24px}
-  .case-step{gap:12px}
-  .case-step h3{max-width:unset}
+  .case-opening h1{font-size:clamp(3.15rem,10.3vw,5.2rem)}
+  .case-title-pair h1{font-size:clamp(2.15rem,7.45vw,3.9rem)}
+  .case-deck{font-size:clamp(1.7rem,5.9vw,2.55rem)}
+  .case-title-pair~.case-summary{margin-left:0}
+  .case-editorial-portrait{grid-template-areas:'text' 'photo'}
+  .case-editorial-portrait .case-photo{aspect-ratio:1.37}
+  .case-sports-spread .case-cover,.case-archive-spread .case-cover{width:min(100%,400px);justify-self:start}
+  .case-centered-heading{margin-bottom:20px}
+  .case-centered-heading h1{font-size:clamp(2.9rem,9.9vw,4.8rem)}
+  .case-lab-title{gap:8px}
+  .case-lab-title h1{font-size:clamp(4.6rem,16vw,8rem)}
+  .case-chapter,.case-result-heading{grid-template-columns:1fr;gap:17px}
+  .case-column-title h2{position:static;max-width:none}
+  .case-context .case-column-title h2{max-width:none}
   .case-next{flex-wrap:wrap}
   .case-tools{font-size:.74rem}
   .case-tools button{min-width:39px;min-height:42px;padding-inline:10px}
 }
+@media(max-width:350px){.case-title-pair h1{font-size:1.86rem}}
 @media(prefers-reduced-motion:reduce){
   .case-page *{scroll-behavior:auto}
   .case-zoom-icon{transition:none}
+  .case-column-title h2{position:static}
 }
-.case-preview-link{display:inline-flex;align-items:center;gap:15px;margin-top:20px;min-height:44px;padding:.6em 1.15em;border:1px solid var(--ink);border-radius:40px;font-size:.86rem;font-weight:600}
-.case-preview-link:hover{background:var(--night);color:var(--paper)}
-.project-fourlife #confronto{padding-top:clamp(24px,4vw,60px);scroll-margin-top:10px}

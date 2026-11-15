@@ -1,3 +1,18 @@
+// CSS handles the stacking. Measure the last chapter whenever text, media or
+// viewport size changes so its final line can be read before the result rises.
+(() => {
+  const leaf = document.querySelector('.case-last-leaf');
+  if (!leaf || !window.ResizeObserver) return;
+  function measureLeaf() {
+    const pinTop = Math.min(0, document.documentElement.clientHeight - leaf.offsetHeight);
+    leaf.style.setProperty('--last-leaf-top', pinTop + 'px');
+    leaf.classList.add('is-measured');
+  }
+  new ResizeObserver(measureLeaf).observe(leaf);
+  window.addEventListener('resize', measureLeaf, {passive:true});
+  measureLeaf();
+})();
+
 (() => {
   const dialog = document.querySelector('.case-lightbox');
   const links = [...document.querySelectorAll('[data-enlarge]')];

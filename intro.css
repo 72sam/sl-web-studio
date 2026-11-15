@@ -1,0 +1,50 @@
+/* An opaque canvas is installed by the head bootstrap before the page can paint. */
+#sl-entry{
+  --entry-width:clamp(106px,12vw,188px);
+  isolation:isolate;
+  background:#171719;
+  transition:opacity 275ms cubic-bezier(.45,.03,.72,1);
+}
+#sl-entry::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(ellipse 48% 57% at 50% 49%,#8e77aa1f,transparent 77%);
+}
+#sl-entry .entry-mark{
+  display:block;width:var(--entry-width);aspect-ratio:28 / 20.195;
+  position:relative;isolation:isolate;background:none;filter:none;
+}
+#sl-entry .entry-mark::before,#sl-entry .entry-mark::after{
+  content:"";position:absolute;inset:0;
+  -webkit-mask:url("assets/sl.svg") center / contain no-repeat;
+  mask:url("assets/sl.svg") center / contain no-repeat;
+}
+#sl-entry .entry-mark::before{
+  background:linear-gradient(124deg,#6d6974,#a6a0ae 42%,#5c5864);
+}
+#sl-entry .entry-mark::after{
+  background:linear-gradient(117deg,#a998c5 2%,#f4f0fa 27%,#a99dbd 40%,#e3d9f3 61%,#faf5ff 80%,#b2a4c5);
+  animation:sl-entry-silver 650ms cubic-bezier(.16,.69,.25,1) both;
+}
+#sl-entry .entry-track{
+  display:block;position:relative;width:calc(var(--entry-width)*.7);height:1px;overflow:hidden;
+  background:#504b56;
+}
+#sl-entry .entry-track i{
+  position:absolute;display:block;inset:0;
+  background:linear-gradient(90deg,transparent,#a792bf 28%,#efe6fb 92%);
+  transform-origin:left;
+  animation:sl-entry-light 710ms cubic-bezier(.22,.72,.26,.99) both;
+}
+html[data-sl-entry="leaving"] #sl-entry{opacity:0}
+@keyframes sl-entry-silver{
+  from{clip-path:inset(0 100% 0 0);opacity:.45}
+  to{clip-path:inset(0 0 0 0);opacity:1}
+}
+@keyframes sl-entry-light{
+  from{transform:scaleX(.06);opacity:.4}
+  to{transform:scaleX(1);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  #sl-entry{transition:opacity 85ms linear}
+  #sl-entry .entry-mark::after,#sl-entry .entry-track i{animation:none}
+}

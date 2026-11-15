@@ -12,7 +12,7 @@
   transition: opacity .42s ease;
 }
 [data-sl-stage] .art-logo { transition: opacity .35s ease; }
-[data-sl-stage].sl-stage-ready .art-logo { opacity: 0; visibility: hidden; }
+[data-sl-stage].sl-stage-ready .art-logo { opacity: 0; }
 [data-sl-stage].sl-stage-ready .sl-stage-canvas { opacity: 1; }
 [data-sl-stack] { isolation: isolate; }
 

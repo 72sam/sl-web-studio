@@ -1,0 +1,51 @@
+.stock-demo { margin: 0; }
+.stock-demo__floors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: #e5d8be;
+  gap: 10px;
+  padding: clamp(12px, 2.1vw, 30px);
+  border-radius: 16px;
+}
+.stock-demo__floor {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(13px, 1.6vw, 26px);
+  border: 1px solid #a4906a44;
+  border-radius: 10px;
+  background: #fffaf0;
+  color: #362a1c;
+}
+.stock-demo__floor--down {background: #303935; color: #fffdf5;}
+.stock-demo .stock-demo__floor h4 {
+  display: flex; align-items: center; gap: 8px;
+  font: 630 clamp(1rem,1.5vw,1.45rem)/1.1 Montserrat, sans-serif;
+  letter-spacing: -.045em;
+}
+.stock-demo__light { width: 7px; height: 7px; border-radius: 50%; background: #af550b; flex: none; }
+.stock-demo__floor--down .stock-demo__light { background: #a6d9b5; }
+.stock-demo .stock-demo__floor p { color: inherit; font: 500 .77rem/1.5 Montserrat,sans-serif; margin: 7px 0 14px; }
+.stock-demo li, .stock-demo ul { margin: 0; padding: 0; list-style: none; }
+.stock-demo li {
+  display: flex; align-items: center; justify-content: space-between; gap: 7px;
+  border-top: 1px solid #82735644; padding-block: 10px; min-height: 46px;
+  font: 540 .84rem/1.32 Montserrat, sans-serif;
+}
+.stock-demo__ledger li span:last-child { white-space: nowrap; color: #75654c; font-size: .72rem; }
+.stock-demo__queue li { border-color: #ffffff38; flex-wrap: wrap; }
+.stock-demo button {
+  min-height: 36px; border: 1px solid #bacebb; border-radius: 30px;
+  padding: 5px 10px; background: #ebf4e6; color: #203a28;
+  font: 600 .73rem/1.25 Montserrat, sans-serif;
+}
+.stock-demo button:hover {background: #fff;}
+.stock-demo .stock-demo__reset {align-self:start; margin-top:10px; background:transparent; color: #f6fcf2;}
+.stock-demo .stock-demo__reset:hover {background:#445149}
+.stock-demo__receipt {margin-top: auto; padding-top: 12px; font: 560 .76rem/1.45 Montserrat,sans-serif;}
+.stock-demo .stock-demo__empty {margin-block: 15px;}
+.stock-demo [hidden] {display:none}
+@media(max-width:1030px) and (min-width:761px), (max-width:540px) {
+  .stock-demo__floors { grid-template-columns: minmax(0, 1fr); }
+  .stock-demo button { min-height: 42px; }
+}

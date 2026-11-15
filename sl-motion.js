@@ -169,8 +169,8 @@
     const light = gl.getUniformLocation(program, 'lightShift');
     const matrix = new Float32Array(9);
     const finePointer = matchMedia('(pointer: fine)');
-    const started = performance.now();
-    let visible = true, frame = 0, lost = false;
+    let started = null;
+    let visible = false, frame = 0, lost = false;
     let targetX = 0, targetY = 0, tiltX = 0, tiltY = 0, scrollPosition = 0;
     let prevTime = 0;
 
@@ -181,6 +181,7 @@
     function render(now) {
       frame = 0;
       if (!visible || document.hidden || reducedMotion.matches || lost) return;
+      if (started === null) started = now;
       const dt = Math.min(64, now - prevTime || 16);
       prevTime = now;
       const blend = 1 - Math.exp(-dt / 123);
@@ -215,14 +216,15 @@
       scrollPosition = clamp(-section.getBoundingClientRect().top / section.offsetHeight, 0, 1);
       queue();
     }
-    stage.addEventListener('pointermove', event => {
+    const pointerSurface = stage.closest('footer') || stage;
+    pointerSurface.addEventListener('pointermove', event => {
       if (event.pointerType === 'touch' || !finePointer.matches) return;
-      const rect = stage.getBoundingClientRect();
+      const rect = pointerSurface.getBoundingClientRect();
       targetX = clamp((event.clientX - rect.left) / rect.width * 2 - 1, -1, 1);
       targetY = clamp((event.clientY - rect.top) / rect.height * 2 - 1, -1, 1);
       queue();
     }, {passive:true});
-    stage.addEventListener('pointerleave', () => { targetX = 0; targetY = 0; queue(); });
+    pointerSurface.addEventListener('pointerleave', () => { targetX = 0; targetY = 0; queue(); });
     canvas.addEventListener('webglcontextlost', () => {
       lost = true;
       stage.classList.remove('sl-stage-ready');
@@ -230,7 +232,10 @@
     stage.append(canvas);
     const size = new ResizeObserver(measure);
     size.observe(stage);
-    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) scroll(); }).observe(stage);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && entry.intersectionRatio >= .12;
+      if (visible) scroll();
+    }, {threshold: [0, .12]}).observe(stage);
     document.addEventListener('visibilitychange', queue);
     window.addEventListener('scroll', scroll, {passive:true});
     reducedMotion.addEventListener('change', queue);
@@ -241,12 +246,19 @@
   document.querySelectorAll('[data-sl-stack]').forEach(stackProjects);
   const stage = document.querySelector('[data-sl-stage]');
   if (stage && 'ResizeObserver' in window && 'IntersectionObserver' in window) {
-    function start() {
-      if (reducedMotion.matches) return;
-      reducedMotion.removeEventListener('change', start);
-      mountStage(stage).catch(() => { stage.classList.remove('sl-stage-ready'); });
+    // Start the renderer only as the footer approaches the viewport.
+    const nearFooter = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || reducedMotion.matches) return;
+      nearFooter.disconnect();
+      reducedMotion.removeEventListener('change', observeFooter);
+      mountStage(stage).catch(() => stage.classList.remove('sl-stage-ready'));
+    }, {rootMargin: '160px 0px'});
+
+    function observeFooter() {
+      nearFooter.unobserve(stage);
+      if (!reducedMotion.matches) nearFooter.observe(stage);
     }
-    reducedMotion.addEventListener('change', start);
-    start();
+    reducedMotion.addEventListener('change', observeFooter);
+    observeFooter();
   }
 })();
