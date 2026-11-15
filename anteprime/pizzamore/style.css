@@ -22,3 +22,16 @@
 .footer{background:#322820;color:var(--cream);border-color:#322820}
 .footer .footnote{color:#d8cbbc;border-color:#5f5044}
 .odoo-more{font-size:.84rem;text-decoration:underline;text-underline-offset:3px;margin-top:.9rem}
+.service-note{font-size:.78rem;color:var(--quiet);margin:.55rem 0 .8rem}
+.service-note[data-invalid]{color:#892c1f;font-weight:700}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.phone-panel{margin:-.6rem 0 1.4rem}
+.phone-panel .btn{min-height:42px}
+#phone-form{border:1px solid var(--line);border-top:3px solid var(--red);background:var(--cream);border-radius:4px;margin-top:.7rem;padding:clamp(14px,2vw,26px);max-width:730px}
+#phone-form h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:1rem}
+.phone-fields{display:grid;grid-template-columns:1.45fr 1fr .8fr 1fr;gap:.65rem}
+.phone-fields label{display:grid;gap:.32rem;font-size:.82rem;font-weight:700;min-width:0}
+.sr-only{position:absolute;clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}
+.entry button[data-status="pending"]{background:var(--red);color:white;border-color:var(--red)}
+.entry button[data-status="arrived"]{background:#d9e9d5;color:#27472f}
+@media(max-width:650px){.phone-fields{grid-template-columns:1fr 1fr}.phone-panel .btn{min-height:44px}.entry button{min-height:42px}}
