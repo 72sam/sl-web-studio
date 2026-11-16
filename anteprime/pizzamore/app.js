@@ -271,6 +271,27 @@
       }
     });
   }
+  function initOdooExcerpt() {
+    const toggle = document.getElementById('clip-toggle');
+    const panel = document.getElementById('clip-odoo');
+    const player = panel.querySelector('.clip-player');
+    toggle.addEventListener('click', () => {
+      const open = panel.hidden;
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+      player.replaceChildren();
+      if (open) {
+        const frame = document.createElement('iframe');
+        frame.title = 'Prenotazioni in Odoo Ristorante, estratto di un minuto';
+        frame.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+        frame.allowFullscreen = true;
+        frame.referrerPolicy = 'strict-origin-when-cross-origin';
+        frame.src = 'https://www.youtube-nocookie.com/embed/t_MCzbETS4k?start=449&end=509&autoplay=1&rel=0';
+        player.append(frame);
+      }
+    });
+  }
+  if (page === 'proposte') initOdooExcerpt();
   if (page === 'index') initRoomGallery();
   if (document.querySelector('.photo-dialog')) initPhotoZoom();
   if (page === 'menu') initMenu();
