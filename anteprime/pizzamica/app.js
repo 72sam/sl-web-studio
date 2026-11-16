@@ -154,9 +154,17 @@
   }));
   document.querySelectorAll('[data-photo]').forEach(button => button.addEventListener('click',() => {
     const img = photoDialog.querySelector('img');
-    img.src = button.dataset.photo;
-    img.alt = button.querySelector('img').alt;
+    const preview = button.querySelector('img');
+    const full = button.dataset.photo;
+    img.src = preview.currentSrc || preview.src;
+    img.alt = preview.alt;
+    img.dataset.full = full;
     photoDialog.showModal();
+    const original = new Image();
+    original.onload = () => {
+      if (photoDialog.open && img.dataset.full === full) img.src = full;
+    };
+    original.src = full;
     photoDialog.querySelector('[data-close]').focus();
   }));
   document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click',() => button.closest('dialog').close()));
@@ -177,7 +185,12 @@
     url.hash = button.dataset.filter === 'all' ? '' : button.dataset.filter;
     history.replaceState(null,'',url);
   }));
-  if (filters.length) filter(location.hash.slice(1));
+  if (filters.length) {
+    const applyLocation = () => filter(location.hash.slice(1));
+    applyLocation();
+    window.addEventListener('hashchange', applyLocation);
+    window.addEventListener('pageshow', applyLocation);
+  }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
       document.body.classList.toggle('header-away', !entry.isIntersecting && entry.boundingClientRect.bottom <= 0);

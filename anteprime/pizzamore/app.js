@@ -90,12 +90,14 @@
       for (const b of filters.querySelectorAll('button')) b.setAttribute('aria-pressed', b === button);
       for (const dish of dishes) dish.hidden = button.dataset.filter !== 'Tutto' && dish.dataset.category !== button.dataset.filter;
     });
+  }
+  function initPhotoZoom() {
     const dialog = document.querySelector('.photo-dialog');
     const picture = dialog.querySelector('img');
     for (const trigger of document.querySelectorAll('.zoom')) {
       trigger.addEventListener('click', () => {
         picture.src = trigger.dataset.image;
-        picture.alt = trigger.dataset.title + ', fotografia illustrativa';
+        picture.alt = trigger.querySelector('img').alt;
         dialog.querySelector('p').textContent = trigger.dataset.title;
         dialog.showModal();
       });
@@ -257,6 +259,20 @@
     });
     render();
   }
+  function initRoomGallery() {
+    const controls = document.querySelector('.room-controls');
+    controls.addEventListener('click', event => {
+      const selected = event.target.closest('button[data-room]');
+      if (!selected) return;
+      for (const button of controls.querySelectorAll('button')) {
+        const active = button === selected;
+        button.setAttribute('aria-pressed', String(active));
+        document.getElementById(button.getAttribute('aria-controls')).hidden = !active;
+      }
+    });
+  }
+  if (page === 'index') initRoomGallery();
+  if (document.querySelector('.photo-dialog')) initPhotoZoom();
   if (page === 'menu') initMenu();
   if (page === 'prenota') initBooking();
   if (page === 'sala') initAgenda();
