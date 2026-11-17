@@ -53,24 +53,16 @@
   }
   function samples() {
     return [
-      { id: 'esempio-1', time: '19:30', guests: 4, area: 'Sala', status: 'confirmed', label: 'Tavolo di esempio' },
-      { id: 'esempio-2', time: '20:00', guests: 2, area: 'Dehors', status: 'confirmed', label: 'Tavolo di esempio' }
+      {id:'esempio-1',time:'19:00',guests:2,area:'Sala',status:'arrived',table:1,label:'Cliente demo A'},
+      {id:'esempio-2',time:'19:30',guests:4,area:'Sala',status:'confirmed',label:'Cliente demo B'},
+      {id:'esempio-3',time:'20:00',guests:2,area:'Dehors',status:'confirmed',table:4,label:'Cliente demo C'},
+      {id:'esempio-4',time:'20:00',guests:4,area:'Dehors',status:'confirmed',label:'Cliente demo D'}
     ];
   }
   function getDay(date) {
     if (!validDay(date) || isMonday(date)) return [];
     const rows = readCalendar()[date];
     return Array.isArray(rows) ? rows : samples();
-  }
-  const states = {
-    pending: {label: 'Da confermare', action: 'Conferma', next: 'confirmed'},
-    confirmed: {label: 'Confermata', action: 'Segna arrivo', next: 'arrived'},
-    arrived: {label: 'Arrivati', action: 'Annulla arrivo', next: 'confirmed'}
-  };
-  function stateOf(record) {
-    if (Object.hasOwn(states, record.status)) return record.status;
-    if (record.arrived) return 'arrived';
-    return record.id.startsWith('esempio-') ? 'confirmed' : 'pending';
   }
   function recordFrom(form, source) {
     const input = new FormData(form);
@@ -152,112 +144,165 @@
     });
   }
   function initAgenda() {
-    const day = document.querySelector('#sala-date');
-    const area = document.querySelector('#sala-area');
-    const container = document.querySelector('#agenda-entries');
-    const phoneToggle = document.querySelector('#phone-toggle');
-    const phoneForm = document.querySelector('#phone-form');
-    const phoneNote = document.querySelector('#phone-service-note');
-    const notice = document.querySelector('#agenda-notice');
-    const reset = document.querySelector('#reset-day');
-    const params = new URLSearchParams(location.search);
-    day.value = validDay(params.get('date')) ? params.get('date') : firstOpenDay();
+    const el = id => document.getElementById(id);
+    const day = el('sala-date');
+    const area = el('sala-area');
+    const phone = el('phone-dialog');
+    const form = el('phone-form');
+    const list = el('booking-list');
+    const floor = el('floor');
+    const query = new URLSearchParams(location.search);
+    const tables = [
+      {number:1,seats:2,area:'Sala'}, {number:2,seats:4,area:'Sala'}, {number:3,seats:8,area:'Sala'},
+      {number:4,seats:2,area:'Dehors'}, {number:5,seats:4,area:'Dehors'}, {number:6,seats:8,area:'Dehors'}
+    ];
+    const labels = {pending:'Da confermare',confirmed:'Confermata',arrived:'Arrivato',completed:'Concluso'};
+    const areaLabel = zone => zone === 'Dehors' ? 'Tavoli fuori' : 'Sala';
+    const tableLabel = number => String(number).padStart(2,'0');
+    const covers = n => n + (n === 1 ? ' persona' : ' persone');
+    const node = (tag, cls, value) => {
+      const element = document.createElement(tag);
+      if (cls) element.className = cls;
+      if (value !== undefined) element.textContent = value;
+      return element;
+    };
+    let timeout;
+    function announce(message) {
+      const toast = el('dashboard-toast');
+      toast.hidden = false;
+      toast.textContent = message;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {toast.hidden = true;}, 2800);
+    }
+    day.value = validDay(query.get('date')) ? query.get('date') : firstOpenDay();
     restoreTicket(day.value);
-    function setPhoneOpen(open) {
-      phoneForm.hidden = !open;
-      phoneToggle.setAttribute('aria-expanded', String(open));
-      if (open) {
-        phoneForm.reset();
-        phoneForm.elements.date.min = today();
-        phoneForm.elements.date.value = day.value;
-        if (areas.includes(area.value)) phoneForm.elements.area.value = area.value;
-        checkServiceDate(phoneForm, phoneNote);
-        phoneForm.elements.date.focus();
-      }
-    }
-    function focusRecord(id) {
-      [...container.querySelectorAll('[data-record]')].find(button => button.dataset.record === id)?.focus();
-    }
-    function render() {
-      const closed = isMonday(day.value);
-      phoneToggle.disabled = closed || day.value < today();
-      reset.disabled = closed;
-      if (phoneToggle.disabled) setPhoneOpen(false);
-      const rows = getDay(day.value).filter(row => areas.includes(row.area) && (area.value === 'Tutti' || row.area === area.value)).sort((a, b) => a.time.localeCompare(b.time));
-      document.querySelector('#tot-bookings').textContent = rows.length;
-      document.querySelector('#tot-guests').textContent = rows.reduce((sum, row) => sum + row.guests, 0);
-      document.querySelector('#tot-arrived').textContent = rows.filter(row => stateOf(row) === 'arrived').length;
-      container.replaceChildren();
+    const idFromSite = (query.get('demo') || '').split('.')[0];
+    let selectedId = idFromSite ? 'prova-' + idFromSite : 'esempio-2';
+    // Consume the demo fallback once. Reloading after a reset must not resurrect a removed request.
+    if (query.has('demo')) history.replaceState(null,'',agendaAddress(day.value));
+
+    function readRows() {
+      const rows = getDay(day.value);
+      // Earlier demos could mark an arrival before allocating a table.
       for (const row of rows) {
-        const element = document.createElement('div');
-        element.className = 'entry';
-        element.innerHTML = '<div class="detail"><time></time><div><strong></strong><small></small></div></div><button type="button"></button>';
-        element.querySelector('time').textContent = row.time;
-        element.querySelector('strong').textContent = row.guests + (row.guests === 1 ? ' persona' : ' persone') + ' · ' + row.area;
-        const status = stateOf(row);
-        const current = states[status];
-        element.querySelector('small').textContent = row.label + ' · ' + current.label;
-        const button = element.querySelector('button');
-        button.textContent = current.action;
-        button.dataset.status = status;
-        button.setAttribute('aria-label', current.action + ' per ' + row.guests + ' alle ' + row.time + ', ' + row.area);
-        button.dataset.record = row.id;
-        container.append(element);
+        if (!labels[row.status]) row.status = row.arrived ? 'arrived' : row.id.startsWith('esempio-') ? 'confirmed' : 'pending';
+        if (row.status !== 'arrived' || row.table) continue;
+        const available = tables.find(t => t.area === row.area && t.seats >= row.guests &&
+          !rows.some(r => r.table === t.number && r.status !== 'completed'));
+        if (available) row.table = available.number;
       }
-      if (!rows.length) {
-        const message = document.createElement('p');
-        message.className = 'empty';
-        message.textContent = closed ? 'Lunedì di chiusura. La sala e il dehors sono chiusi.' : 'Nessuna prenotazione per questa selezione.';
-        container.append(message);
-      }
+      return rows;
     }
-    day.addEventListener('change', () => {
-      day.value = validDay(day.value) ? day.value : firstOpenDay();
-      setPhoneOpen(false);
-      notice.textContent = isMonday(day.value) ? 'Lunedì di chiusura, nessun turno.' : '';
-      history.replaceState(null, '', agendaAddress(day.value));
-      render();
+    function selected(rows) {return rows.find(row => row.id === selectedId);}
+    function matchesZone(row) {return area.value === 'Tutti' || row.area === area.value;}
+    function draw() {
+      const closed = isMonday(day.value);
+      const rows = readRows().filter(matchesZone).sort((a,b) => a.time.localeCompare(b.time));
+      const visibleTables = tables.filter(matchesZone);
+      if (!selected(rows)) selectedId = (rows.find(r => r.status !== 'completed' && !r.table) || rows[0])?.id;
+      const chosen = selected(rows);
+      const active = rows.filter(row => row.status !== 'completed');
+      el('demo-day').textContent = 'Turno di cena · ' + formatDate.format(new Date(day.value+'T12:00:00'));
+      el('area-summary').textContent = (area.value === 'Tutti' ? 'Sala e tavoli fuori' : areaLabel(area.value)) + ' · planimetria di esempio';
+      el('phone-toggle').disabled = closed || day.value < today();
+      el('reset-dashboard').disabled = closed;
+      el('stat-bookings').textContent = active.length;
+      el('stat-guests').textContent = active.reduce((n,row) => n+row.guests,0);
+      el('stat-pending').textContent = active.filter(row => !row.table).length;
+      el('stat-occupied').replaceChildren(document.createTextNode(visibleTables.filter(t =>
+        active.some(r=>r.status==='arrived' && r.table===t.number)).length),node('em','', '/'+visibleTables.length));
+      list.replaceChildren(...rows.map(row => {
+        const button=node('button','booking-row'+(row.id===selectedId?' active':''));
+        button.type='button';button.dataset.booking=row.id;button.setAttribute('aria-pressed',String(row.id===selectedId));
+        const info=node('span');
+        const summary=covers(row.guests)+' · '+areaLabel(row.area)+(row.table ? ' · Tavolo '+tableLabel(row.table) : '');
+        info.append(node('strong','',row.label),node('small','',summary));
+        const label = row.status==='confirmed' ? (row.table ? 'Prenotato' : 'Da assegnare') : labels[row.status];
+        button.append(node('span','time',row.time),info,node('span','status '+row.status,label));
+        return button;
+      }));
+      if (!rows.length) list.append(node('p','booking-empty',closed?'Lunedì di chiusura.':'Nessuna prenotazione per questa selezione.'));
+      floor.replaceChildren(...visibleTables.map(table => {
+        const occupant = active.find(r=>r.table===table.number);
+        const occupied = occupant?.status === 'arrived';
+        const button=node('button','table'+(occupant?(occupied?' arrived':' booked'):'')+(chosen?.table === table.number?' selected-table':''));
+        button.type='button';button.dataset.table=table.number;
+        button.disabled=!chosen || ['arrived','completed'].includes(chosen.status) ||
+          (occupant && occupant!==chosen) || chosen.guests>table.seats || chosen.area!==table.area;
+        button.setAttribute('aria-label','Tavolo '+table.number+', '+table.seats+' posti, '+areaLabel(table.area)+', '+(occupant?(occupied?'occupato':'prenotato'):'libero'));
+        button.append(node('b','',tableLabel(table.number)),node('span','',table.seats+' posti · '+areaLabel(table.area)));
+        return button;
+      }));
+      el('selection-title').textContent=chosen?.label || 'Nessuna prenotazione selezionata';
+      el('selection-detail').textContent=chosen ? [chosen.time,covers(chosen.guests),areaLabel(chosen.area),
+        chosen.status==='completed'?'Servizio concluso':chosen.table?'Tavolo '+tableLabel(chosen.table):'Scegli un tavolo libero'].join(' · ') : '';
+      el('confirm').hidden = chosen?.status!=='pending';
+      el('unassign').hidden = chosen?.status==='completed' || chosen?.status==='arrived';
+      el('unassign').disabled = !chosen?.table;
+      el('arrive').hidden = chosen?.status==='completed' || chosen?.status==='arrived';
+      el('arrive').disabled = !chosen?.table;
+      el('complete').hidden = chosen?.status!=='arrived';
+      el('undo-arrival').hidden = chosen?.status!=='arrived';
+    }
+    function updateSelected(change, message) {
+      const rows=readRows(), current=selected(rows);
+      if (!current) return;
+      change(current);
+      writeDay(day.value,rows);
+      draw();announce(message);
+    }
+    list.addEventListener('click',event=>{
+      const row=event.target.closest('[data-booking]');
+      if (!row) return;
+      selectedId=row.dataset.booking;draw();
+      list.querySelector('.active')?.focus({preventScroll:true});
     });
-    area.addEventListener('change', render);
-    phoneToggle.addEventListener('click', () => setPhoneOpen(phoneForm.hidden));
-    phoneForm.elements.date.addEventListener('input', () => checkServiceDate(phoneForm, phoneNote));
-    phoneForm.elements.date.addEventListener('change', () => checkServiceDate(phoneForm, phoneNote));
-    phoneForm.addEventListener('submit', event => {
+    floor.addEventListener('click',event=>{
+      const table=event.target.closest('[data-table]');
+      if (!table || table.disabled) return;
+      updateSelected(row=>{row.table=Number(table.dataset.table);row.status='confirmed';},'Tavolo assegnato e prenotazione confermata.');
+      el('arrive').focus({preventScroll:true});
+    });
+    el('unassign').addEventListener('click',()=>updateSelected(r=>{r.table=null;},'Tavolo liberato. Puoi sceglierne un altro.'));
+    el('confirm').addEventListener('click',()=>updateSelected(r=>{r.status='confirmed';},'Richiesta confermata.'));
+    el('arrive').addEventListener('click',()=>updateSelected(r=>{r.status='arrived';},'Arrivo registrato.'));
+    el('undo-arrival').addEventListener('click',()=>updateSelected(r=>{r.status='confirmed';},'Arrivo annullato.'));
+    el('complete').addEventListener('click',()=>updateSelected(r=>{r.status='completed';r.table=null;},'Servizio concluso, tavolo libero.'));
+    el('shift-toggle').addEventListener('click',()=>{
+      const filters=el('shift-options');
+      filters.hidden=!filters.hidden;
+      el('shift-toggle').setAttribute('aria-expanded',String(!filters.hidden));
+      if (!filters.hidden) day.focus();
+    });
+    day.addEventListener('change',()=>{
+      if (!validDay(day.value)) day.value=firstOpenDay();
+      history.replaceState(null,'',agendaAddress(day.value));draw();
+    });
+    area.addEventListener('change',draw);
+    el('phone-toggle').addEventListener('click',()=>{
+      form.reset();form.elements.date.min=today();form.elements.date.value=day.value;
+      if (areas.includes(area.value)) form.elements.area.value=area.value;
+      checkServiceDate(form,el('phone-service-note'));
+      phone.showModal();
+    });
+    el('phone-close').addEventListener('click',()=>phone.close());
+    for (const event of ['input','change']) form.elements.date.addEventListener(event,()=>checkServiceDate(form,el('phone-service-note')));
+    form.addEventListener('submit',event=>{
       event.preventDefault();
-      if (!checkServiceDate(phoneForm, phoneNote) || !phoneForm.reportValidity()) return;
-      const selectedDay = phoneForm.elements.date.value;
-      if (selectedDay < today()) return;
-      const record = recordFrom(phoneForm, 'phone');
-      writeDay(selectedDay, [...getDay(selectedDay), record]);
-      day.value = selectedDay;
-      if (area.value !== 'Tutti' && area.value !== record.area) area.value = record.area;
-      setPhoneOpen(false);
-      history.replaceState(null, '', agendaAddress(selectedDay));
-      render();
-      focusRecord(record.id);
-      notice.textContent = 'Richiesta telefonica aggiunta, da confermare.';
+      if (!checkServiceDate(form,el('phone-service-note')) || !form.reportValidity() || form.elements.date.value < today()) return;
+      const row=recordFrom(form,'phone');
+      day.value=form.elements.date.value;
+      writeDay(day.value,[...getDay(day.value),row]);
+      if (!matchesZone(row)) area.value=row.area;
+      selectedId=row.id;phone.close();
+      history.replaceState(null,'',agendaAddress(day.value));draw();
+      list.querySelector('.active')?.focus({preventScroll:true});announce('Richiesta telefonica aggiunta.');
     });
-    container.addEventListener('click', e => {
-      const button = e.target.closest('[data-record]');
-      if (!button) return;
-      const records = getDay(day.value);
-      const selected = records.find(r => r.id === button.dataset.record);
-      if (!selected) return;
-      selected.status = states[stateOf(selected)].next;
-      writeDay(day.value, records);
-      render();
-      notice.textContent = 'Richiesta aggiornata: ' + states[selected.status].label + '.';
-      focusRecord(selected.id);
+    el('reset-dashboard').addEventListener('click',()=>{
+      writeDay(day.value,samples());selectedId='esempio-2';area.value='Tutti';draw();announce('Serata di esempio ripristinata.');
     });
-    reset.addEventListener('click', () => {
-      if (isMonday(day.value)) return;
-      setPhoneOpen(false);
-      notice.textContent = 'Serata di esempio ripristinata.';
-      writeDay(day.value, samples());
-      history.replaceState(null, '', agendaAddress(day.value));
-      render();
-    });
-    render();
+    window.addEventListener('pageshow',draw);
+    draw();
   }
   function initRoomGallery() {
     const controls = document.querySelector('.room-controls');

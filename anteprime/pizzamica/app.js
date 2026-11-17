@@ -1,23 +1,27 @@
 (() => {
   'use strict';
-  const products = JSON.parse(document.getElementById('product-data').textContent);
+  const products = JSON.parse(document.getElementById('product-data')?.textContent || '[]');
   const byId = new Map(products.map(product => [product.id, product]));
   const cartDialog = document.getElementById('cart');
   const photoDialog = document.getElementById('photo');
   const cartBody = document.getElementById('cart-body');
-  const queue = document.getElementById('queue');
   const key = 'sl-pizzamica-preview-1';
-  const states = ['In coda', 'In preparazione', 'Pronto'];
   const shifts = ['18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00'];
   const currency = cents => (cents / 100).toLocaleString('it-IT', {style:'currency', currency:'EUR'});
-  let state = {cart:{}, orders:[
-    {number:16, slot:'19:00', dish:'2 × Margherita', state:0},
-    {number:17, slot:'19:30', dish:'1 × Bolognese · 1 × Vivace', state:1}
-  ]};
-  try {
-    const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
-    if (saved?.cart && Array.isArray(saved.orders)) state = saved;
-  } catch { /* Preserve the demo in browsers with private storage disabled. */ }
+  function initialOrders() {
+    return [
+      {number:16, slot:'19:00', dish:'2 × Margherita', state:0},
+      {number:17, slot:'19:30', dish:'1 × Bolognese · 1 × Vivace', state:1}
+    ];
+  }
+  let state = {cart:{}, orders:initialOrders()};
+  function refreshState() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+      if (saved?.cart && Array.isArray(saved.orders)) state = saved;
+    } catch {}
+  }
+  refreshState();
   const save = () => { try { sessionStorage.setItem(key, JSON.stringify(state)); } catch {} };
   const entries = () => products.map(p => ({...p,count:Number(state.cart[p.id]) || 0})).filter(p => p.count > 0);
   let notice;
@@ -102,8 +106,7 @@
       state.cart = {};
       save();
       updateCount();
-      renderQueue();
-      const counter = link('Vedi il ritiro dal banco ↗','proposte.html#banco');
+      const counter = link('Vedi il ritiro dal banco ↗','banco.html?ordine='+number);
       counter.addEventListener('click',() => { if (cartDialog.open) cartDialog.close(); });
       cartBody.replaceChildren(element('h3','Ritiro di prova confermato'),element('p','Cartone '+number+' · ore '+order.slot),element('p',order.dish),counter);
       counter.focus();
@@ -114,32 +117,66 @@
       (controls.find(el => el.dataset.cartControl === previousControl) || controls[0] || select).focus();
     }
   }
-  function renderQueue() {
-    if (!queue) return;
-    queue.replaceChildren();
-    const byPickup = [...state.orders].sort((a, b) => a.slot.localeCompare(b.slot) || a.number - b.number);
-    for (const item of byPickup) {
-      const ticket = element('div',undefined,'ticket');
-      ticket.append(element('strong',item.slot+' · Cartone '+item.number),element('p',item.dish));
-      if (item.state < 2) {
-        const btn = action(item.state === 0 ? 'Inizia a preparare' : 'Segna pronto','small-btn',() => {
-          item.state++;
-          save();
-          renderQueue();
-          queue.querySelector('[data-order="'+item.number+'"]')?.focus();
-          notify('Cartone '+item.number+' · '+states[item.state]);
-        });
-        btn.dataset.advance = '';
-        btn.dataset.order = String(item.number);
-        btn.setAttribute('aria-label',btn.textContent+' il cartone '+item.number);
-        ticket.append(btn);
-      }
-      const status = element('small',states[item.state]);
-      if (item.state === 2) { status.tabIndex = -1; status.dataset.order = String(item.number); }
-      ticket.append(status);
-      queue.append(ticket);
+  function initCounter() {
+    const board = document.getElementById('order-board');
+    const titles = ['Da preparare', 'In preparazione', 'Pronti al ritiro'];
+    const actions = ['Inizia preparazione', 'Segna pronto', 'Segna ritirato'];
+    const highlighted = Number(new URLSearchParams(location.search).get('ordine')) || null;
+    let focusNumber = null;
+    function draw() {
+      const byPickup = [...state.orders].sort((a,b) => a.slot.localeCompare(b.slot) || a.number-b.number);
+      document.querySelectorAll('[data-count]').forEach(count => {
+        count.textContent = byPickup.filter(o=>o.state===Number(count.dataset.count)).length;
+      });
+      board.replaceChildren(...titles.map((title,stage)=>{
+        const orders = byPickup.filter(order=>order.state===stage);
+        const column=element('section',undefined,'order-column');
+        const heading=element('h2',title);heading.append(element('span',String(orders.length)));
+        column.append(heading);
+        for (const order of orders) {
+          const selected=order.number===(focusNumber || highlighted);
+          const card=element('article',undefined,'order-card'+(selected?' highlight':''));
+          card.dataset.number=order.number;
+          const advance=element('button',actions[stage]+' →','primary');
+          advance.type='button';advance.dataset.advance=order.number;
+          advance.setAttribute('aria-label',actions[stage]+' il cartone '+order.number);
+          card.append(element('small','RITIRO'),element('div',order.slot,'order-time'),element('h3','Cartone '+order.number),element('p',order.dish),advance);
+          column.append(card);
+        }
+        if (!orders.length) column.append(element('p','Nessun ordine in questa fase','order-empty'));
+        return column;
+      }));
     }
+    board.addEventListener('click',event=>{
+      const button=event.target.closest('[data-advance]');
+      if (!button) return;
+      const item=state.orders.find(o=>o.number===Number(button.dataset.advance));
+      if (!item || item.state>2) return;
+      item.state++;focusNumber=item.number;
+      save();draw();
+      const action=board.querySelector('[data-advance="'+item.number+'"]') || document.getElementById('reset-dashboard');
+      action.focus({preventScroll:true});
+      const toast=document.getElementById('dashboard-toast');
+      toast.textContent='Cartone '+item.number+' · '+['In coda','In preparazione','Pronto al ritiro','Ritirato'][item.state];
+      toast.hidden=false;clearTimeout(notice);notice=setTimeout(()=>{toast.hidden=true;},2400);
+    });
+    document.getElementById('reset-dashboard').addEventListener('click',()=>{
+      state.orders=initialOrders();focusNumber=null;save();draw();
+      history.replaceState(null,'',location.pathname);
+    });
+    window.addEventListener('pageshow',()=>{refreshState();draw();});
+    draw();
   }
+  if (document.body.dataset.page === 'banco') {initCounter();return;}
+  function openOldCounterLink() {
+    if(document.body.dataset.page==='proposte' && location.hash==='#banco') location.replace('banco.html');
+  }
+  openOldCounterLink();
+  window.addEventListener('hashchange',openOldCounterLink);
+  window.addEventListener('pageshow',()=>{
+    refreshState();updateCount();
+    if (cartDialog?.open) renderCart();
+  });
   document.querySelectorAll('[data-add]').forEach(button => button.addEventListener('click',() => {
     const id = Number(button.dataset.add);
     change(id,1);
@@ -197,5 +234,4 @@
     }).observe(document.querySelector('.mast'));
   }
   updateCount();
-  renderQueue();
 })();
